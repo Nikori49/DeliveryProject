@@ -1,0 +1,29 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Delivety:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Delivety_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="Delivety/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Delivety" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.11.4" />
+          <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
+          <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-el-api:9.0.58" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-api:9.0.58" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jasper-el:9.0.58" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jasper:9.0.58" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-jsp-api:9.0.58" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-juli:9.0.58" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-servlet-api:9.0.58" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-util-scan:9.0.58" />
+          <element id="library" level="project" name="Maven: org.apache.tomcat:tomcat-util:9.0.58" />
+          <element id="library" level="project" name="Maven: org.eclipse.jdt:ecj:3.26.0" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.25" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

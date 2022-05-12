@@ -5,7 +5,7 @@
   Time: 11:35
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -15,11 +15,30 @@
 
 <html lang="${language}">
 <head>
+    <style >
+        table {
+            border: 1px solid #000;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th {
+            border: 1px solid #000;
+            text-align: center;
+        }
+
+        td {
+            border: 1px solid #000;
+            text-align: center;
+        }
+
+
+    </style>
     <title><fmt:message key="label.createAccountButton"/></title>
 </head>
 <body>
 <c:if test="${loggedUser!=null}">
-    <c:redirect url="home.jsp"></c:redirect>
+    <c:redirect url="home.jsp"/>
 </c:if>
 
     <%--Language selection block--%>
@@ -50,10 +69,10 @@
     </div>
 
 
-<div style="position: absolute; left:0%; top:0%"  >
+<div style="position: absolute; left:0; top:0"  >
     <a href="home.jsp"><fmt:message key="label.backToMain"/></a>
 </div>
-<div style="position: absolute; left:35%; top:0%"  >
+<div style="position: absolute; left:35%; top:0"  >
 <form action="controller" method="post">
     <table>
         <input type="hidden" name="command" value="register"><br>

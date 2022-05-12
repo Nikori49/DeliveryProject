@@ -24,11 +24,26 @@ public class DBManager {
     private DBManager() throws SQLException {
     }
 
+    public static final String GET_USER_BY_ROLE="SELECT * FROM users where role=?";
+    public static final String UPDATE_ORDER_STATUS="UPDATE orders SET order_status=? where id=?";
+    public static final String GET_ALL_ROUTES="SELECT * from routes";
+    public static final String GET_USER_BY_LOGIN="SELECT * FROM users WHERE login=?";
+    public static final String GET_USER_BY_EMAIL="SELECT * FROM users WHERE email=?";
+    public static final String GET_USER_BY_PHONE_NUMBER="SELECT * FROM users WHERE phone_number=?";
+    public static final String INSERT_USER="INSERT INTO users VALUES (DEFAULT,?,?,?,?,?,md5(?),'client')";
+    public static final String INSERT_ORDER="INSERT INTO orders VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?)";
+    public static final String GET_ALL_TARIFF="SELECT * from tariffs";
+    public static final String GET_ORDER_BY_ID="SELECT * from orders where id = ?";
+    public static final String GET_ROUTE_BY_ID="SELECT * from routes where id = ?";
+    public static final String GET_ALL_ORDERS="SELECT * FROM orders";
+    public static final String GET_ALL_USERS="SELECT * FROM users";
+    public static final String GET_USERS_ORDERS="SELECT * from orders where USER_ID = ?";
+
 
     public List<User> getAllClients() {
         List<User> clientList = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-           PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users where role=?");
+           PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ROLE);
            preparedStatement.setString(1,"client");
            ResultSet resultSet = preparedStatement.executeQuery();
            while (resultSet.next()){
@@ -42,7 +57,7 @@ public class DBManager {
 
     public void modifyOrderStatus(Long orderId, String newOrderStatus) {
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE orders SET order_status=? where id=?");
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_STATUS);
             preparedStatement.setString(1, newOrderStatus);
             preparedStatement.setLong(2, orderId);
             preparedStatement.execute();
@@ -55,7 +70,7 @@ public class DBManager {
 
         List<Route> routeList = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from routes");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ROUTES);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 String start = resultSet.getString("start");
@@ -74,11 +89,10 @@ public class DBManager {
         return routeList;
     }
 
-
     public User findUserByLogin(String login) {
         User user = null;
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE login=?");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_LOGIN);
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -94,7 +108,7 @@ public class DBManager {
     public User findUserByEMail(String email) {
         User user = null;
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE email=?");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL);
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -110,7 +124,7 @@ public class DBManager {
     public User findUserByPhoneNumber(String phoneNumber) {
         User user = null;
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE phone_number=?");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_PHONE_NUMBER);
             preparedStatement.setString(1, phoneNumber);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -154,7 +168,7 @@ public class DBManager {
 
     public User insertUser(User user) {
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users VALUES (DEFAULT,?,?,?,?,?,md5(?),'client')", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPhoneNumber());
@@ -177,7 +191,7 @@ public class DBManager {
 
     public Order insertOrder(Order order) {
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO orders VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setLong(1, order.getUserId());
             preparedStatement.setString(2, order.getCargoName());
@@ -202,12 +216,11 @@ public class DBManager {
         return order;
     }
 
-
     public List<Tariff> getTariffList() {
 
         List<Tariff> tariffList = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from tariffs");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_TARIFF);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Long id = resultSet.getLong("id");
@@ -233,7 +246,7 @@ public class DBManager {
     public Order getOrderById(Long orderId) {
         Order order = new Order();
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from orders where id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_BY_ID);
             preparedStatement.setLong(1, orderId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -248,7 +261,7 @@ public class DBManager {
     public Route getRouteById(Long routeId) {
         Route route = new Route();
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from routes where id = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ROUTE_BY_ID);
             preparedStatement.setLong(1, routeId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -267,7 +280,7 @@ public class DBManager {
     public List<Order> getAllOrders() {
         List<Order> orderList = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM orders");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ORDERS);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 orderList.add(extractOrder(resultSet));
@@ -281,7 +294,7 @@ public class DBManager {
     public List<User> getAllUsers() {
         List<User> userList = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_USERS);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 userList.add(extractUser(resultSet));
@@ -292,12 +305,11 @@ public class DBManager {
         return userList;
     }
 
-
     public List<Order> getUsersOrders(Long userId) {
         List<Order> orderList = new ArrayList<>();
 
         try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * from orders where USER_ID = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_USERS_ORDERS);
             preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {

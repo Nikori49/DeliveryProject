@@ -40,7 +40,7 @@
                 <form action="controller" method="get">
                 <input type="hidden" name="command" value="changeLanguage">
                 <input type="hidden" name="changeLanguageTo" value="ru">
-                <input type="hidden" name="returnTo" value="home.jsp">
+                <input type="hidden" name="returnTo" value="index.jsp">
                 <input type="submit"  <c:if test="${language=='ru'}">disabled</c:if>  value="Ru">
             </form>
             </td>
@@ -48,7 +48,7 @@
                 <form action="controller" method="get">
                 <input type="hidden" name="command" value="changeLanguage">
                 <input type="hidden" name="changeLanguageTo" value="en">
-                <input type="hidden" name="returnTo" value="home.jsp">
+                <input type="hidden" name="returnTo" value="index.jsp">
                 <input type="submit" <c:if test="${language=='en'}">disabled</c:if>  value="En">
             </form>
             </td>

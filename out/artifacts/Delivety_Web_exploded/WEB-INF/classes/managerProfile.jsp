@@ -31,7 +31,7 @@
 </head>
 <body>
 <c:if test="${loggedUser.role != 'manager'}">
-    <c:redirect url="home.jsp"></c:redirect>
+    <c:redirect url="index.jsp"></c:redirect>
 </c:if>
 <%--Language selection block--%>
 <div style="border: white; position:absolute; top:0;right: 18%;">
@@ -64,7 +64,7 @@
 
 <div style="position: absolute; top: 0%; right: 0%;">
     <fmt:message key="label.welcome"/> ${loggedUser.name}!
-    <a href="home.jsp"><fmt:message key="label.backToMain"/> </a>
+    <a href="index.jsp"><fmt:message key="label.backToMain"/> </a>
     <form action="controller" method="get">
         <input hidden name="command" value="logout">
         <input type="submit" value="<fmt:message key="label.logoutButton"/>">

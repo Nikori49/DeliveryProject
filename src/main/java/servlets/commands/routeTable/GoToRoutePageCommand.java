@@ -7,11 +7,8 @@ import servlets.commands.Command;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 public class GoToRoutePageCommand implements Command {
     @Override
@@ -56,6 +53,6 @@ public class GoToRoutePageCommand implements Command {
         request.getSession().setAttribute("routeTablePageQuantity",routePageCount);
         request.getSession().setAttribute("itemsPerRoutePage",itemsPerPage);
 
-        return "home.jsp";
+        return "index.jsp";
     }
 }

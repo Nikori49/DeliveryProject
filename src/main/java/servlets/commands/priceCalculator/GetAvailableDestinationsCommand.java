@@ -8,12 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class GetAvailableDestinationsCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String address ="home.jsp";
+        String address = "index.jsp";
         String start = request.getParameter("start");
         System.out.println(start);
         List <String> availableDestinations = new ArrayList<>();

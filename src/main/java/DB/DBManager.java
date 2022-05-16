@@ -8,6 +8,7 @@ import java.util.List;
 
 public class DBManager {
     private static DBManager instance;
+    private final Connection connection;
 
 
     public static synchronized DBManager getInstance() {
@@ -22,6 +23,7 @@ public class DBManager {
     }
 
     private DBManager() throws SQLException {
+        this.connection = ConnectionPool.getInstance().getConnection();
     }
 
     public static final String GET_USER_BY_ROLE="SELECT * FROM users where role=?";
@@ -42,8 +44,7 @@ public class DBManager {
 
     public List<User> getAllClients() {
         List<User> clientList = new ArrayList<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-           PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ROLE);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ROLE)) {
            preparedStatement.setString(1,"client");
            ResultSet resultSet = preparedStatement.executeQuery();
            while (resultSet.next()){
@@ -56,12 +57,18 @@ public class DBManager {
     }
 
     public void modifyOrderStatus(Long orderId, String newOrderStatus) {
-        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_STATUS);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ORDER_STATUS)) {
+            connection.setAutoCommit(false);
             preparedStatement.setString(1, newOrderStatus);
             preparedStatement.setLong(2, orderId);
             preparedStatement.execute();
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
     }
@@ -69,30 +76,28 @@ public class DBManager {
     public List<Route> getRouteList() {
 
         List<Route> routeList = new ArrayList<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ROUTES);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_ROUTES)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 String start = resultSet.getString("start");
                 String destination = resultSet.getString("destination");
                 Long id = resultSet.getLong("id");
                 int length = resultSet.getInt("length");
-
-
                 routeList.add(new Route(id, start, destination, length));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         return routeList;
     }
 
     public User findUserByLogin(String login) {
+        return getUser(login, GET_USER_BY_LOGIN);
+    }
+
+    public User getUser(String login, String statement) {
         User user = null;
-        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_LOGIN);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(statement)){
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -100,41 +105,16 @@ public class DBManager {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return null;
         }
         return user;
     }
 
     public User findUserByEMail(String email) {
-        User user = null;
-        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL);
-            preparedStatement.setString(1, email);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                user = extractUser(resultSet);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return user;
+        return getUser(email, GET_USER_BY_EMAIL);
     }
 
     public User findUserByPhoneNumber(String phoneNumber) {
-        User user = null;
-        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_PHONE_NUMBER);
-            preparedStatement.setString(1, phoneNumber);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                user = extractUser(resultSet);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return user;
+        return getUser(phoneNumber, GET_USER_BY_PHONE_NUMBER);
     }
 
     private User extractUser(ResultSet rs) throws SQLException {
@@ -167,9 +147,8 @@ public class DBManager {
     }
 
     public User insertUser(User user) {
-        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
-
+        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
+            connection.setAutoCommit(false);
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPhoneNumber());
             preparedStatement.setString(3, user.getName());
@@ -181,18 +160,21 @@ public class DBManager {
             while (resultSet.next()) {
                 user.setId(resultSet.getLong(1));
             }
-
-
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
         return user;
     }
 
     public Order insertOrder(Order order) {
-        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER, Statement.RETURN_GENERATED_KEYS);
-
+        try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER, Statement.RETURN_GENERATED_KEYS)) {
+            connection.setAutoCommit(false);
             preparedStatement.setLong(1, order.getUserId());
             preparedStatement.setString(2, order.getCargoName());
             preparedStatement.setDouble(3, order.getCargoMass());
@@ -208,9 +190,13 @@ public class DBManager {
             while (resultSet.next()) {
                 order.setId(resultSet.getLong(1));
             }
-
-
+            connection.commit();
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
         return order;

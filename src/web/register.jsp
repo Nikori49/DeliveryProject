@@ -38,7 +38,7 @@
 </head>
 <body>
 <c:if test="${loggedUser!=null}">
-    <c:redirect url="home.jsp"/>
+    <c:redirect url="index.jsp"/>
 </c:if>
 
     <%--Language selection block--%>
@@ -70,7 +70,7 @@
 
 
 <div style="position: absolute; left:0; top:0"  >
-    <a href="home.jsp"><fmt:message key="label.backToMain"/></a>
+    <a href="index.jsp"><fmt:message key="label.backToMain"/></a>
 </div>
 <div style="position: absolute; left:35%; top:0"  >
 <form action="controller" method="post">

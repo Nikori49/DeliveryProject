@@ -40,6 +40,6 @@ public class SetItemsPerRoutePageCommand implements Command {
         request.getSession().setAttribute("itemsPerRoutePage",itemsPerPage);
 
         request.getSession().setAttribute("routeListPage",routeList);
-        return "home.jsp";
+        return "index.jsp";
     }
 }

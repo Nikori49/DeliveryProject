@@ -24,7 +24,7 @@ public class LoginFilter implements Filter {
 
         if (user==null){
             HttpServletResponse responseHttp = (HttpServletResponse) response;
-            responseHttp.sendRedirect("home.jsp");
+            responseHttp.sendRedirect("index.jsp");
         }else {
             if (Objects.equals(user.getRole(), "manager")){
                 ManagerProfileCommand managerProfileCommand=new ManagerProfileCommand();

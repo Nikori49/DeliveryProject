@@ -112,7 +112,7 @@ public class RegisterCommand implements Command {
         if (errorMessage.isEmpty()) {
             User user = new User(0l, email, phoneNumber, name, surname, login, password, "client");
             user = DBManager.getInstance().insertUser(user);
-            address = "home.jsp";
+            address = "index.jsp";
             request.getSession().setAttribute("loggedUser", user);
         } else {
             request.setAttribute("error", errorMessage);

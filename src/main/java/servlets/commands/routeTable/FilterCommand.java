@@ -1,24 +1,19 @@
 package servlets.commands.routeTable;
 
 import DB.Cache;
-import DB.DBManager;
 import DB.Utils;
 import DB.entity.Route;
 import servlets.commands.Command;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 public class FilterCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String address = "home.jsp";
+        String address = "index.jsp";
 
 
         String startFilter = request.getParameter("startFilter");

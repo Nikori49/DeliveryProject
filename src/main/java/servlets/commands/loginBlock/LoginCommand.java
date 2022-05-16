@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 public class LoginCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String address = "home.jsp";
+        String address = "index.jsp";
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         byte[] digest;

@@ -14,7 +14,7 @@
 
     <filter>
         <filter-name>LoginFilter</filter-name>
-        <filter-class>servlets.LoginFilter</filter-class>
+        <filter-class>filters.LoginFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -24,7 +24,7 @@
 
     <filter>
         <filter-name>RegistrationFilter</filter-name>
-        <filter-class>servlets.RegistrationFilter</filter-class>
+        <filter-class>filters.RegistrationFilter</filter-class>
     </filter>
 
     <filter-mapping>

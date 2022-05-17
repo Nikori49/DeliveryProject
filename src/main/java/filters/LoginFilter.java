@@ -1,4 +1,4 @@
-package servlets;
+package filters;
 
 import DB.entity.User;
 import servlets.commands.clientProfile.ClientProfileCommand;

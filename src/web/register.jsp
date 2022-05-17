@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ts" tagdir="/WEB-INF/tags"  %>
 
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="HomePage"/>
@@ -15,25 +16,7 @@
 
 <html lang="${language}">
 <head>
-    <style >
-        table {
-            border: 1px solid #000;
-            border-collapse: collapse;
-            text-align: center;
-        }
-
-        th {
-            border: 1px solid #000;
-            text-align: center;
-        }
-
-        td {
-            border: 1px solid #000;
-            text-align: center;
-        }
-
-
-    </style>
+    <ts:tableStyle/>
     <title><fmt:message key="label.createAccountButton"/></title>
 </head>
 <body>

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ts" tagdir="/WEB-INF/tags"  %>
 
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="HomePage"/>
@@ -9,25 +10,7 @@
 <html lang="${language}">
 <head>
     <title><fmt:message key="label.welcome"/> ${loggedUser.name}</title>
-    <style>
-        table {
-            border: 1px solid #000;
-            border-collapse: collapse;
-            text-align: center;
-        }
-
-        th {
-            border: 1px solid #000;
-            text-align: center;
-        }
-
-        td {
-            border: 1px solid #000;
-            text-align: center;
-        }
-
-
-    </style>
+    <ts:tableStyle/>
 </head>
 <body>
 <c:if test="${loggedUser.role != 'manager'}">
